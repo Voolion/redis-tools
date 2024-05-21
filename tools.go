@@ -57,6 +57,7 @@ func NewTools(client RedisClient) *RedisTools {
 }
 
 // Cas compare and swap
+// 如果旧值和当前值相等，则更新为新值，否则返回false
 func (r *RedisTools) Cas(ctx context.Context, key string, oldValue interface{},
 	newValue interface{}) (bool, error) {
 
@@ -75,6 +76,7 @@ func (r *RedisTools) Cas(ctx context.Context, key string, oldValue interface{},
 // If the timeout is -1, keep timeout (redis >= 6.0).
 func (r *RedisTools) CasEx(ctx context.Context, key string, oldValue interface{},
 	newValue interface{}, expire time.Duration) (bool, error) {
+	// 如果时间为0，则不设置超时
 	if expire == 0 {
 		return r.Cas(ctx, key, oldValue, newValue)
 	}
